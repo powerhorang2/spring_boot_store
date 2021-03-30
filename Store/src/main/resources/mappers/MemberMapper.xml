@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.store.member.mapper.MemberMapper">
+
+	<!-- tb_member 테이블 전체 컬럼 -->
+	<sql id="memberColumns">
+		  id
+		, email
+		, password
+		, nickname
+		, phone
+		, delete_yn
+		, insert_time
+		, update_time
+		, last_login_time
+	</sql>
+
+	<!-- 회원 정보 저장 -->
+	<insert id="saveMember" parameterType="MemberDTO">
+		INSERT INTO tb_member (
+			<include refid="memberColumns" />
+		) VALUES (
+			  #{id}
+			, #{email}
+			, IFNULL(#{password}, password)
+			, #{nickname}
+			, #{phone}
+			, 'N'
+			, NOW()
+			, NULL
+			, NULL
+		)
+		ON DUPLICATE KEY UPDATE
+			  update_time = NOW()
+			, password = IFNULL(#{password}, password)
+			, nickname = #{nickname}
+			, phone = #{phone}
+	</insert>
+
+	<!-- 회원 정보 조회 -->
+	<select id="selectMember" parameterType="string" resultType="MemberDTO">
+		SELECT
+			<include refid="memberColumns" />
+		FROM
+			tb_member
+		WHERE
+			delete_yn = 'N'
+			AND email = #{value}
+	</select>
+
+	<!-- 회원 정보 삭제 -->
+	<update id="deleteMember" parameterType="string">
+		UPDATE tb_member
+		SET
+			delete_yn = 'Y'
+		WHERE
+			email = #{email}
+	</update>
+
+	<!-- 회원 리스트 조회 -->
+	<select id="selectMemberList" resultType="MemberDTO">
+		SELECT
+			<include refid="memberColumns" />
+		FROM
+			tb_member
+		WHERE
+			delete_yn = 'N'
+		ORDER BY
+			id DESC, insert_time DESC
+	</select>
+
+	<!-- 전체 회원 수 조회 -->
+	<select id="selectMemberTotalCount" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_member
+		WHERE
+			delete_yn = 'N'
+	</select>
+
+</mapper>
