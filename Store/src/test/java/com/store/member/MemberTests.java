@@ -66,6 +66,18 @@ public class MemberTests {
 			}
 		}
 		
+	}
+	
+	@Test
+	public void testByDeleteMember() {
+		
+		boolean result = memberService.deleteMember("admin");
+		
+		String message = result ? "성공" : "실패";
+		
+		System.out.println("=========================");
+		System.out.println("삭제 " + message);
+		System.out.println("=========================");
 		
 	}
 
