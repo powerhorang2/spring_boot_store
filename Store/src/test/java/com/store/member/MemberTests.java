@@ -19,10 +19,11 @@ public class MemberTests {
 	public void testBySaveMember() {
 
 		MemberDTO member = new MemberDTO();
+		member.setId((long) 1);
 		member.setEmail("admin");
-		member.setPassword("1234");
-		member.setNickname("관리자");
-		member.setPhone("01012345678");
+		member.setPassword("123!@#");
+		member.setNickname("매니저");
+		member.setPhone("01011112222");
 		assertTrue(memberService.saveMember(member));
 	}
 
